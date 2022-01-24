@@ -1,8 +1,10 @@
 package week14.day01;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,6 +26,7 @@ class OrderServiceTest {
         o1.addProduct(p1);
         o1.addProduct(p2);
         o1.addProduct(p5);
+        o1.addProduct(p4);
 
         Order o2 = new Order("on delivery", LocalDate.of(2021, 6, 1));
         o2.addProduct(p3);
@@ -52,4 +55,29 @@ class OrderServiceTest {
         orderService.saveOrder(o5);
     }
 
+    @Test
+    void countOrderNumbersByStatusTest(){
+        assertEquals(3,orderService.countOrderNumbersByStatus("pending"));
+    }
+
+    @Test
+    void getOrdersBetweenDatesTest(){
+        List<Order> result = orderService.getOrdersBetweenDates(LocalDate.of(2021, 5, 30),LocalDate.of(2021, 6, 2));
+        assertEquals(2,result.size());
+    }
+
+    @Test
+    void isLessThanFalseTest() {
+        assertFalse(orderService.isLessThan(3));
+    }
+
+    @Test
+    void isLessThanTrueTest() {
+        assertTrue(orderService.isLessThan(4));
+    }
+    @Test
+    void mostProductsInOrderTest() {
+        Order result = orderService.mostProductsInOrder();
+        assertEquals(3,result.getProducts().size());
+    }
 }
