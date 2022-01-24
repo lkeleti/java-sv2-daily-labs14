@@ -75,9 +75,15 @@ class OrderServiceTest {
     void isLessThanTrueTest() {
         assertTrue(orderService.isLessThan(4));
     }
+
     @Test
     void mostProductsInOrderTest() {
         Order result = orderService.mostProductsInOrder();
-        assertEquals(3,result.getProducts().size());
+        assertEquals(4,result.getProducts().size());
+    }
+
+    @Test
+    void getOrdersMatchCategoryTest() {
+        assertEquals(3, orderService.getOrdersMatchCategory("Book").size());
     }
 }

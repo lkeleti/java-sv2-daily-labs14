@@ -18,25 +18,32 @@ public class OrderService {
 
     public long countOrderNumbersByStatus(String status) {
         return orders.stream()
-                .filter(o->o.getStatus().equals(status))
+                .filter(o -> o.getStatus().equals(status))
                 .count();
     }
 
     public List<Order> getOrdersBetweenDates(LocalDate start, LocalDate end) {
         return orders.stream()
-                .filter(o->o.getOrderDate().isAfter(start) && o.getOrderDate().isBefore(end))
+                .filter(o -> o.getOrderDate().isAfter(start) && o.getOrderDate().isBefore(end))
                 .collect(Collectors.toList());
     }
 
     public boolean isLessThan(int minOrders) {
         return orders.stream()
-                .filter(o->o.getProducts().size() < minOrders)
-                .count() > 0;
+                .anyMatch(o -> o.getProducts().size() < minOrders);
     }
 
     public Order mostProductsInOrder() {
         return orders.stream()
                 .max(Comparator.comparingInt(o -> o.getProducts().size()))
-                .orElseThrow(NullPointerException::new);
+                .orElseThrow(() -> new IllegalStateException("List is empty!"));
+    }
+
+    public List<Order> getOrdersMatchCategory(String category) {
+        return orders.stream()
+                .filter(o -> o.getProducts()
+                        .stream()
+                        .anyMatch(p->p.getCategory().equals(category)))
+                .collect(Collectors.toList());
     }
 }
