@@ -1,7 +1,8 @@
 package week14.day04;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PairFinder {
     public int findPairs(int[] arr) {
@@ -10,6 +11,7 @@ public class PairFinder {
             statistic.computeIfAbsent(i, s -> 0);
             statistic.put(i, statistic.get(i) + 1);
         }
+
         return statistic.values().stream()
                 .mapToInt(i -> i/2)
                 .sum();
