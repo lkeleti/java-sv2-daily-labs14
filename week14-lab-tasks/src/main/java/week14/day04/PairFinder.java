@@ -5,15 +5,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PairFinder {
-    public int findPairs(int[] arr) {
-        Map<Integer, Integer> statistic = new TreeMap<>();
-        for (int i : arr) {
-            statistic.computeIfAbsent(i, s -> 0);
-            statistic.put(i, statistic.get(i) + 1);
-        }
+    public int findPairs(List<Integer> arr) {
+//        Map<Integer, Integer> statistic = new TreeMap<>();
+//        for (int i : arr) {
+//            statistic.computeIfAbsent(i, s -> 0);
+//            statistic.put(i, statistic.get(i) + 1);
+//        }
 
-        return statistic.values().stream()
-                .mapToInt(i -> i/2)
+        return arr.stream()
+                .collect(Collectors.groupingBy(Integer::intValue,Collectors.counting()))
+                .values()
+                .stream()
+                .mapToInt(i -> i.intValue()/2)
                 .sum();
     }
 }
