@@ -44,22 +44,43 @@ public class StreetService {
 
     public Map<String, List<Integer>> processData(Path path) {
         readFromFile(path);
-        Map<String, List<Integer>> streetsData = new TreeMap<>();
+        Map<String, List<Boolean>> streetsData = new TreeMap<>();
+        for (Street street : streets) {
+            streetsData.computeIfAbsent(street.getName(), i -> new ArrayList<>());
+            streetsData.get(street.getName()).add(street.even);
+        }
+        return giveNumbersToHouse(streetsData);
+    }
+
+    private Map<String, List<Integer>> giveNumbersToHouse(Map<String, List<Boolean>> streetsData) {
+        Map<String, List<Integer>> streetWithHouseNumbers = new TreeMap<>();
+        for (String key : streetsData.keySet()) {
+            streetWithHouseNumbers.computeIfAbsent(key, i -> new ArrayList<>());
+            giveNumersInaStreet(streetWithHouseNumbers, streetsData.get(key), key);
+        }
+        return streetWithHouseNumbers;
+    }
+
+    private void giveNumersInaStreet(Map<String, List<Integer>> streetWithHouseNumbers, List<Boolean> values, String key) {
         int evenNumber = 2;
         int oddNumber = 1;
         int number;
-        for (Street street: streets) {
-            if (street.isEven()) {
+        for (Boolean value : values) {
+            if (value) {
                 number = evenNumber;
                 evenNumber += 2;
-            }
-            else {
+            } else {
                 number = oddNumber;
                 oddNumber += 2;
             }
-            streetsData.computeIfAbsent(street.getName(), i -> new ArrayList<>());
-            streetsData.get(street.getName()).add(number);
+            streetWithHouseNumbers.get(key).add(number);
         }
-        return streetsData;
+    }
+
+    public long numberOfEvenhousesByStreetName(Map<String, List<Integer>> streets, String street) {
+        return streets.get(street).stream()
+                .mapToInt(i -> i)
+                .filter(i -> i % 2 == 0)
+                .count();
     }
 }

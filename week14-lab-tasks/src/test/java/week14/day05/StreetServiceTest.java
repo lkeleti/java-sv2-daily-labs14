@@ -15,5 +15,7 @@ class StreetServiceTest {
         StreetService ss = new StreetService();
         Map<String, List<Integer>> streetsData = ss.processData(Path.of("src/test/resources/streets.txt"));
         System.out.println(streetsData);
+        System.out.println(ss.numberOfEvenhousesByStreetName(streetsData,"Kossuth"));
+        System.out.println(ss.numberOfEvenhousesByStreetName(streetsData,"Petofi"));
     }
 }
